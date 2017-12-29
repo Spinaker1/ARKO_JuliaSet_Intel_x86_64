@@ -1,14 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-extern "C" double juliaSet(unsigned* pPixelBuffer, int width, int height, int k, double cX, double cY);
+extern "C" double juliaSet(double cX, double cY, double zX, double zY, unsigned * pixels, int width, int height);
 
 int main()
 {
 	int width = 600;
 	int height = 450;
-	double cX = 4.0;
-	double cY = 2.0;
+	float cX = -1;
+	float cY = 2.0;
 
 	sf::RenderWindow window(sf::VideoMode(width, height), "Julia sets");
 
@@ -23,12 +23,11 @@ int main()
 	for (int i = 0; i < width*height; i++) {
 		pixels[4*i] = 0;
 		pixels[4*i+1] = 0;
-		pixels[4*i+2] = 0;
+		pixels[4*i+2] = 255;
 		pixels[4*i+3] = 255;
 	}
 
-
-	std::cout << juliaSet((unsigned *)pixels, width, height, 0, cX, cY);
+	std::cout << juliaSet(2.0, 2.0, -1.5, -1.0, (unsigned *)pixels, width, height);
 
 	texture.update(pixels);
 
