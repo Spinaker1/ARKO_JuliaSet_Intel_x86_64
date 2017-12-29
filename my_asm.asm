@@ -50,8 +50,8 @@ juliaSet:
 	movsd xmm13,[four]
 
 next:
-	movsd xmm8,xmm3
-	movsd xmm9,xmm7
+	movsd xmm8,xmm7
+	movsd xmm9,xmm3
 	mov rax,255
 
 calc:
@@ -113,6 +113,8 @@ nextRow:
 	inc r11
 	cmp r11,rbx
 	jne next
+
+	mov rax,rbx
 
 	pop rbp 
     ret
