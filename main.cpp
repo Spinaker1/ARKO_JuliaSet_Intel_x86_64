@@ -7,8 +7,8 @@ int main()
 {
 	int width = 600;
 	int height = 450;
-	float cX = -1;
-	float cY = 2.0;
+	double cX = -1;
+	double cY = 2.0;
 
 	sf::RenderWindow window(sf::VideoMode(width, height), "Julia sets");
 
@@ -27,7 +27,7 @@ int main()
 		pixels[4*i+3] = 255;
 	}
 
-	std::cout << juliaSet(2.0, 2.0, -1.5, -1.0, (unsigned *)pixels, width, height);
+	std::cout << juliaSet(-0.73, 0.19, -1.5, -1.0, (unsigned *)pixels, width, height);
 
 	texture.update(pixels);
 
