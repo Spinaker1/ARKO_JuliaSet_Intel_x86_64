@@ -1,16 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-extern "C" int juliaSet(double cX, double cY, double zX, double zY, unsigned * pixels, int width, int height);
+extern "C" void juliaSet(double cX, double cY, double moveX, double moveY, unsigned * pixels, int width, int height, int zoom);
 
 int main()
 {
 	int width = 800;
 	int height = 600;
+	int zoom = 1;
 	double cX = -0.73;
 	double cY = 0.19;
-	double zX = -1.5;
-	double zY = -1.0;
+	double moveX = 0;
+	double moveY = 0;
 
 	sf::RenderWindow window(sf::VideoMode(width, height), "Julia sets");
 
@@ -29,12 +30,16 @@ int main()
 		pixels[4*i+3] = 255;
 	}
 
-	std::cout << juliaSet(cX, cY, zX, zY, (unsigned *)pixels, width, height);
+	juliaSet(cX, cY, moveX, moveY, (unsigned *)pixels, width, height, zoom);
 
 	texture.update(pixels);
 
 	sf::Sprite sprite;
 	sprite.setTexture(texture);
+
+	window.clear();
+	window.draw(sprite);
+	window.display();
 
 	while (window.isOpen())
 	{
@@ -43,11 +48,16 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::MouseButtonReleased)
+			{
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					std::cout << "the right button was pressed" << std::endl;
+					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
+					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+				}
+			}
 		}
-
-		window.clear();
-		window.draw(sprite);
-		window.display();
 	}
 
 	return 0;

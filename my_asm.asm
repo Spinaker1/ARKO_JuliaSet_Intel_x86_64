@@ -2,6 +2,8 @@ section .data
 two: dq 2.0
 three: dq 3.0
 four: dq 4.0
+moneh: dq -1.5
+mone: dq -1.0
 
 section .text 
 bits 64 
@@ -26,29 +28,37 @@ juliaSet:
 	;xmm6 - deltaY
 	;xmm7 - zX
 	;xmm13 - 4
-
+	;xmm15 - zoom
 
 	mov cl,[rbp+16]
 	mov edx,[rbp+24]
 	mov ebx,[rbp+32]
+	mov eax,[rbp+72]
 
 	mov r10,0
 	mov r11,0
 	mov r12,0
 	
+	addsd xmm2,[moneh]
+	addsd xmm3,[mone]
+
+	CVTSI2SD xmm15, rax
+
+	; deltaX=3/(w*zoom)
 	CVTSI2SD xmm7, rdx
+	mulsd xmm7,xmm15
 	movsd xmm5,[three]
 	divsd xmm5,xmm7
 
-	; deltaY=2/h
+	; deltaY=2/(h*zoom)
 	CVTSI2SD xmm8, rbx
+	mulsd xmm8,xmm15
 	movsd xmm6,[two]
 	divsd xmm6,xmm8
 
 	movsd xmm7,xmm2
 
 	movsd xmm13,[four]
-
 next:
 	movsd xmm8,xmm7
 	movsd xmm9,xmm3
@@ -114,7 +124,7 @@ nextRow:
 	cmp r11,rbx
 	jne next
 
-	mov rax,rbx
+	movsd xmm0,xmm15
 
 	pop rbp 
     ret
